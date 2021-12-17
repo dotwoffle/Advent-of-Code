@@ -3,6 +3,7 @@ package challenges;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+
 /**Day 2 challenge: <a href=https://adventofcode.com/2021/day/2>Dive!</a>*/
 public class Day2Challenge extends Challenge {
 	

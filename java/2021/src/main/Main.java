@@ -1,7 +1,7 @@
 package main;
 
 import challenges.Challenge;
-import challenges.Day2Challenge;
+import challenges.Day3Challenge;
 
 
 /**Driver class for challenges.*/
@@ -15,7 +15,7 @@ public class Main {
 		
 		try {
 			
-			Challenge challenge = new Day2Challenge();
+			Challenge challenge = new Day3Challenge();
 			
 			challenge.runChallenge();
 			
