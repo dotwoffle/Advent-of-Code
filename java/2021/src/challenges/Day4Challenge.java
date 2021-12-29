@@ -3,7 +3,6 @@ package challenges;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 /**Day 4 challenge: <a href=https://adventofcode.com/2021/day/4>Giant Squid</a>*/
@@ -221,8 +220,6 @@ public class Day4Challenge extends Challenge {
 		
 		initBoards(); //reset boards
 		
-		int winningNum = 0; //number that wins the last board
-		Board winningBoard = null; //last board that wins
 		ArrayList<Board> remainingBoards = boards; //list of boards that haven't won yet
 		
 		//pull numbers until no boards are left
