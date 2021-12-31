@@ -29,7 +29,17 @@ def challengePart1(input):
     print(floor)
 
 def challengePart2(input):
-    pass
+    
+    floor = 0 #current floor
+
+    for x in range(len(input[0])):
+
+        floor += 1 if input[0][x] == '(' else -1
+
+        #check for basement
+        if floor == -1:
+            print(x+1)
+            break
 
 
 ##############
