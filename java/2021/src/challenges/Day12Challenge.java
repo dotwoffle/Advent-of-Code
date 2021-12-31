@@ -121,7 +121,7 @@ public class Day12Challenge extends Challenge {
 			
 			for(String key : connections.keySet())
 				for(String id : connections.get(key))
-					graphStr += key + " -> " + id + "\n";
+					graphStr += key + " -- " + id + "\n";
 			
 			return graphStr;
 			
@@ -140,10 +140,12 @@ public class Day12Challenge extends Challenge {
 		/*    Variables    */
 		/*******************/
 		
+		/**If this is a small cave node, whether or not this is the second time this cave has occured in its path.*/
+		public final boolean IS_DOUBLE_COUNT;
 		/**The parent node of this node.*/
 		public final TreeNode PARENT;
 		/**The graph node ID for this tree node.*/
-		public final String NODE_ID;
+		public String nodeId;
 		/**The child nodes of this node.*/
 		public ArrayList<TreeNode> children;
 		
@@ -159,9 +161,17 @@ public class Day12Challenge extends Challenge {
 			
 			//init
 			
-			this.NODE_ID = nodeId;
+			this.nodeId = "PENDING";
 			this.PARENT = parent;
 			this.children = new ArrayList<>();
+			
+			//see if this is a double small cave
+			if(CAVE_GRAPH.isSmallCave(nodeId) && isNodeInPath(nodeId))
+				this.IS_DOUBLE_COUNT = true;
+			else
+				this.IS_DOUBLE_COUNT = false;
+			
+			this.nodeId = nodeId;
 			
 		}
 		
@@ -170,11 +180,12 @@ public class Day12Challenge extends Challenge {
 		/*    Methods    */
 		/*****************/
 		
-		/**Counts the total number of completed paths in this tree.*/
-		public int countPaths(int indent) {
+		/**Counts the total number of completed paths in this tree.
+		 * @return The number of paths where the end node is reached.*/
+		public int countPaths() {
 			
 			//base case
-			if(NODE_ID.equals(CAVE_GRAPH.END_NODE))
+			if(nodeId.equals(CAVE_GRAPH.END_NODE))
 				return 1;
 			else if(children.isEmpty())
 				return 0;
@@ -186,7 +197,7 @@ public class Day12Challenge extends Challenge {
 				
 				//find all paths in child nodes
 				for(TreeNode child : children)
-					totalPaths += child.countPaths(indent+1);
+					totalPaths += child.countPaths();
 				
 				return totalPaths;
 				
@@ -194,19 +205,56 @@ public class Day12Challenge extends Challenge {
 			
 		}
 		
-		/**Checks if a given node is in the backtrace to the root from this node.*/
+		/**Checks if a given node is in the backtrace to the root from this node.
+		 * @param nodeId The ID of the node to search for.
+		 * @return True if the given node is found in one of the ancestor nodes, false otherwise.*/
 		public boolean isNodeInPath(String nodeId) {
 			
 			TreeNode currentNode = this; //current node
 			
 			while(currentNode != null) {
-				if(currentNode.NODE_ID.equals(nodeId))
+				if(currentNode.nodeId.equals(nodeId))
 					return true;
 				else
 					currentNode = currentNode.PARENT;
 			}
 			
 			return false;
+			
+		}
+		
+		/**Checks if the given node occurs twice along the backtrace from this node to the root.
+		 * @param nodeId The ID of the node to search for.
+		 * @return True if the given node is found twice in the path, false otherwise.*/
+		public boolean isNodeDouble(String nodeId) {
+			
+			TreeNode currentNode = this; //current node
+			
+			while(currentNode != null) {
+				if(currentNode.nodeId.equals(nodeId) && currentNode.IS_DOUBLE_COUNT)
+					return true;
+				else
+					currentNode = currentNode.PARENT;
+			}
+			
+			return false;
+			
+		}
+		
+		/**Checks if there is a double-counted small cave in the path this node is on.
+		 * @return The ID of the node that is doubly counted, if there is one. Otherwise, null is returned.*/
+		public String getDoubleNode() {
+			
+			TreeNode currentNode = this; //current node
+			
+			while(currentNode != null) {
+				if(currentNode.IS_DOUBLE_COUNT)
+					return currentNode.nodeId;
+				else
+					currentNode = currentNode.PARENT;
+			}
+			
+			return null;
 			
 		}
 		
@@ -252,14 +300,77 @@ public class Day12Challenge extends Challenge {
 				
 		}
 		
-		System.out.println(pathTree.countPaths(0));
+		System.out.println(pathTree.countPaths());
 			
 	}
 		
 
 	@Override
 	protected void challengePart2() {
-
+		
+		TreeNode pathTree = new TreeNode(CAVE_GRAPH.START_NODE, null); //tree to store paths
+		TreeNode currentNode = null; //track current tree location
+		Queue<Pair<String, TreeNode>> searchQ = new LinkedList<>(); //graph search queue
+		
+		//add start node to queue
+		searchQ.add(new Pair<String, TreeNode>(CAVE_GRAPH.START_NODE, pathTree));
+		
+		//find all paths
+		while(!searchQ.isEmpty()) {
+			
+			Pair<String, TreeNode> qTop = searchQ.remove(); //pop queue
+			String nextCave = qTop.first; //get next cave to search
+			currentNode = qTop.second; //update current tree node
+			
+			//get all neighbors
+			for(String neighbor : CAVE_GRAPH.getNeighbors(nextCave)) {
+				
+				//did not feel like condensing these if statements
+				if(!neighbor.equals(CAVE_GRAPH.START_NODE)) {
+					
+					if(CAVE_GRAPH.isSmallCave(neighbor)) {
+						
+						if(currentNode.getDoubleNode() == null) {
+							
+							TreeNode newChild = new TreeNode(neighbor, currentNode); //create child node
+							currentNode.children.add(newChild); //add to tree
+							
+							//add neighbor to queue if it's not the end node
+							if(!neighbor.equals(CAVE_GRAPH.END_NODE))
+								searchQ.add(new Pair<String, TreeNode>(neighbor, newChild));
+							
+						}
+						else if(!neighbor.equals(currentNode.getDoubleNode()) && !currentNode.isNodeInPath(neighbor)) {
+							
+							TreeNode newChild = new TreeNode(neighbor, currentNode); //create child node
+							currentNode.children.add(newChild); //add to tree
+							
+							//add neighbor to queue if it's not the end node
+							if(!neighbor.equals(CAVE_GRAPH.END_NODE))
+								searchQ.add(new Pair<String, TreeNode>(neighbor, newChild));
+							
+						}
+						
+					}
+					else {
+						
+						TreeNode newChild = new TreeNode(neighbor, currentNode); //create child node
+						currentNode.children.add(newChild); //add to tree
+						
+						//add neighbor to queue if it's not the end node
+						if(!neighbor.equals(CAVE_GRAPH.END_NODE))
+							searchQ.add(new Pair<String, TreeNode>(neighbor, newChild));
+						
+					}
+					
+				}
+					
+			}
+				
+		}
+		
+		System.out.println(pathTree.countPaths());
+		
 	}
 
 }
