@@ -42,7 +42,43 @@ def challengePart1(input):
     print(len(visited))
 
 def challengePart2(input):
-    pass
+    
+    santaPos = [0, 0] #santa's current position
+    roboPos = [0, 0] #robo santa's current position
+    visited = {(santaPos[0], santaPos[1])} #positions already visited
+
+    #do moves
+    for x in range(len(input[0])):
+
+        #update santa position
+        if x % 2 == 0:
+
+            if input[0][x] == '^':
+                santaPos[1] += 1
+            elif input[0][x] == 'v':
+                santaPos[1] -= 1
+            elif input[0][x] == '>':
+                santaPos[0] += 1
+            elif input[0][x] == '<':
+                santaPos[0] -= 1
+
+            visited.add((santaPos[0], santaPos[1])) #mark current position as visited
+        
+        #update robot position
+        else:
+            
+            if input[0][x] == '^':
+                roboPos[1] += 1
+            elif input[0][x] == 'v':
+                roboPos[1] -= 1
+            elif input[0][x] == '>':
+                roboPos[0] += 1
+            elif input[0][x] == '<':
+                roboPos[0] -= 1
+
+            visited.add((roboPos[0], roboPos[1])) #mark current position as visited
+
+    print(len(visited))
 
 
 ##############
