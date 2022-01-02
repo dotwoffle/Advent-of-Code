@@ -1,6 +1,6 @@
 """
-Day 1 Challenge: Not Quite Lisp
-https://adventofcode.com/2015/day/1
+Day 4 Challenge: The Ideal Stocking Stuffer
+https://adventofcode.com/2015/day/4
 """
 
 from hashlib import md5
