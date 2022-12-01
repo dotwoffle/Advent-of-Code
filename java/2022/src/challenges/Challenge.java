@@ -51,6 +51,7 @@ public abstract class Challenge {
 		System.out.println();
 		
 		challengePart1();
+		initialize();
 		
 		System.out.println();
 		System.out.println("========== PART 2 ==========");
@@ -101,6 +102,8 @@ public abstract class Challenge {
 	
 	/**Runs the solution for part 2 of the challenge.*/
 	protected abstract void challengePart2();
-	
+
+	/**Initializes any states needed for the challenge. Also called between part 1 and 2 to reset the challenge state.*/
+	protected abstract void initialize();
 
 }
