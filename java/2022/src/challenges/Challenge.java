@@ -36,6 +36,8 @@ public abstract class Challenge {
 		this.DAY = day;
 		this.YEAR = year;
 		this.input = loadInput();
+
+		initialize();
 		
 	}
 	
@@ -64,7 +66,7 @@ public abstract class Challenge {
 	/**Loads the challenge input from the associated file.
 	 * @return A list of strings with each element containing a line from the input file.
 	 * @throws FileNotFoundException If the matching input file is not found.
-	 * @throws IOException*/
+	 * @throws IOException */
 	private ArrayList<String> loadInput() throws FileNotFoundException, IOException{
 		
 		//path to input file
@@ -103,7 +105,8 @@ public abstract class Challenge {
 	/**Runs the solution for part 2 of the challenge.*/
 	protected abstract void challengePart2();
 
-	/**Initializes any states needed for the challenge. Also called between part 1 and 2 to reset the challenge state.*/
+	/**Initializes any states needed for the challenge. Called in the constructor. Also called between part 1 and 2 to
+	 * reset the challenge state.*/
 	protected abstract void initialize();
 
 }
