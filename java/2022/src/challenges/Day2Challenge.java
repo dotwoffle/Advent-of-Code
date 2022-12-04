@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 
-/**Day 1 challenge: <a href="https://adventofcode.com/2022/day/2">Rock Paper Scissors</a>*/
+/**Day 2 challenge: <a href="https://adventofcode.com/2022/day/2">Rock Paper Scissors</a>*/
 public class Day2Challenge extends Challenge {
 
     /*Variables*/
