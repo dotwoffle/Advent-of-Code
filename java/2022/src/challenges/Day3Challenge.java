@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 
-/**Day 3 challenge: <a href="https://adventofcode.com/2022/day/2">Rucksack Reorganization</a>*/
+/**Day 3 challenge: <a href="https://adventofcode.com/2022/day/3">Rucksack Reorganization</a>*/
 public class Day3Challenge extends Challenge {
 
     /*Constructor*/

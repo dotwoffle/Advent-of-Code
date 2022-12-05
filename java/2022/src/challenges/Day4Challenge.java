@@ -3,7 +3,7 @@ package challenges;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-/**Day 4 challenge: <a href="https://adventofcode.com/2022/day/2">Camp Cleanup</a>*/
+/**Day 4 challenge: <a href="https://adventofcode.com/2022/day/4">Camp Cleanup</a>*/
 public class Day4Challenge extends Challenge {
 
     /*Constructor*/
