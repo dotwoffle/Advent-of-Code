@@ -3,9 +3,7 @@ package challenges;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 
 
 /**Day 7 challenge: <a href="https://adventofcode.com/2022/day/7">No Space Left on Device</a>*/
