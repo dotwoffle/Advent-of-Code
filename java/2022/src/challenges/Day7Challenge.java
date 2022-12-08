@@ -3,6 +3,9 @@ package challenges;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 
 
 /**Day 7 challenge: <a href="https://adventofcode.com/2022/day/7">No Space Left on Device</a>*/
@@ -151,16 +154,23 @@ public class Day7Challenge extends Challenge {
     @Override
     protected void challengePart2() {
         
+        int freeSpace = 70000000 - root.getSize(); //get free space
+        int requiredSpace = 30000000 - freeSpace; //get space required to delete
+        ArrayList<Integer> sizes = getDirSizes(root); //get sizes of all directories
+        Collections.sort(sizes); //sort list
 
+        //find smallest size that satisfies space requirement
+        for(int size : sizes) {
+            if(size >= requiredSpace) {
+                System.out.println(size);
+                break;
+            }
+        }
         
     }
 
     @Override
-    protected void initialize() {
-     
-        
-
-    }
+    protected void initialize() {}
 
     /**Builds the directory tree from the input file.*/
     private void buildDirectoryTree() {
@@ -225,6 +235,23 @@ public class Day7Challenge extends Challenge {
         }
 
         return totalSize;
+
+    }
+
+    /**Gets the sizes of each directory in the tree.*/
+    private ArrayList<Integer> getDirSizes(Directory root) {
+
+        ArrayList<Integer> sizes = new ArrayList<>(); //sizes of all dirs
+
+        sizes.add(root.getSize());
+
+        for(Directory subdir : root.getSubdirs()) {
+            for(int size : getDirSizes(subdir)) {
+                sizes.add(size);
+            }
+        }
+
+        return sizes;
 
     }
     
