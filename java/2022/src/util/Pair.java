@@ -30,4 +30,9 @@ public class Pair<T, U> {
 		
 	}
 
+
+	public boolean equalsPair(Pair<T, U> other) {
+		return first.equals(other.first) && second.equals(other.second);
+	}
+
 }
