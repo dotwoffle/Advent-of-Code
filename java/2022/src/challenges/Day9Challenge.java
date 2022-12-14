@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import util.Pair;
 
 
-/**Day 9 challenge: <a href="https://adventofcode.com/2022/day/9">idk yet</a>*/
+/**Day 9 challenge: <a href="https://adventofcode.com/2022/day/9">Rope Bridge</a>*/
 public class Day9Challenge extends Challenge {
 
     /*Variables*/
