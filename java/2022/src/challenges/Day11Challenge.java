@@ -2,7 +2,6 @@ package challenges;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -29,17 +28,17 @@ public class Day11Challenge extends Challenge {
         /**How many items this monke has inspected.*/
         public long inspectCount;
         /**Queue of items for this monke.*/
-        private Queue<BigInteger> itemQueue;
+        private Queue<Integer> itemQueue;
         /**The operation to perform on items. The first entry is multiplication or addition, and the second is the
          * value given for the operation.
         */
-        private Pair<String, BigInteger> operation;
+        private Pair<String, Integer> operation;
 
 
         /*Constructor*/
 
         /**Initializes the monke.*/
-        public Monke(int testValue, int trueMonke, int falseMonke, String opType, BigInteger opValue) {
+        public Monke(int testValue, int trueMonke, int falseMonke, String opType, int opValue) {
 
             //init
 
@@ -56,7 +55,7 @@ public class Day11Challenge extends Challenge {
         /*Methods*/
 
         /**Adds an item to this monke's item queue.*/
-        public void addItem(BigInteger item) {
+        public void addItem(int item) {
             itemQueue.add(item);
         }
 
@@ -66,26 +65,24 @@ public class Day11Challenge extends Challenge {
         }
 
         /**Performs the process of inspecting and throwing one item in the queue.*/
-        public Pair<Integer, BigInteger> inspectAndThrowNextItem(boolean decreaseWorry) {
+        public Pair<Integer, Integer> inspectAndThrowNextItem(boolean decreaseWorry) {
 
             inspectCount++;
-            BigInteger item = itemQueue.remove(); //take item from queue
+            int item = itemQueue.remove(); //take item from queue
 
             //apply operation
             item = switch (operation.first) {
-                case "*" -> item.multiply(operation.second);
-                case "+" -> item.add(operation.second);
-                case "square" -> item.multiply(item);
+                case "*" -> item * operation.second;
+                case "+" -> item + operation.second;
+                case "square" -> item * item;
                 default -> item;
             };
 
             if(decreaseWorry) {
-                item.divide(new BigInteger("3")); //decrease worry
+                item /= 3; //decrease worry
             }
 
-            boolean testPasses = item.mod(new BigInteger(Integer.toString(testValue))).equals(new BigInteger("0"));
-
-            return new Pair<Integer, BigInteger>(testPasses ? trueMonke : falseMonke, item);
+            return new Pair<Integer, Integer>(item % testValue == 0 ? trueMonke : falseMonke, item);
 
         }
 
@@ -115,7 +112,7 @@ public class Day11Challenge extends Challenge {
             for(Monke monke : monkes) {
 
                 while(monke.hasItem()) {
-                    Pair<Integer, BigInteger> inspectResult = monke.inspectAndThrowNextItem(true); //monke inspects item
+                    Pair<Integer, Integer> inspectResult = monke.inspectAndThrowNextItem(true); //monke inspects item
                     monkes.get(inspectResult.first).addItem(inspectResult.second);
                 }
 
@@ -138,28 +135,28 @@ public class Day11Challenge extends Challenge {
     @Override
     protected void challengePart2() {
         
-        //do 10000 rounds
-        for(int round = 0; round < 10000; round++) {
-            for(Monke monke : monkes) {
+        // //do 10000 rounds
+        // for(int round = 0; round < 10000; round++) {
+        //     for(Monke monke : monkes) {
 
-                while(monke.hasItem()) {
-                    Pair<Integer, BigInteger> inspectResult = monke.inspectAndThrowNextItem(false); //monke inspects item
-                    monkes.get(inspectResult.first).addItem(inspectResult.second);
-                }
+        //         while(monke.hasItem()) {
+        //             Pair<Integer, BigInteger> inspectResult = monke.inspectAndThrowNextItem(false); //monke inspects item
+        //             monkes.get(inspectResult.first).addItem(inspectResult.second);
+        //         }
 
-            }
-        }
+        //     }
+        // }
 
-        ArrayList<Long> monkeBusiness = new ArrayList<>(); //total inspection counts for each monke
+        // ArrayList<Long> monkeBusiness = new ArrayList<>(); //total inspection counts for each monke
 
-        //add inspection counts
-        for(Monke monke : monkes) {
-            monkeBusiness.add(monke.inspectCount);
-        }
+        // //add inspection counts
+        // for(Monke monke : monkes) {
+        //     monkeBusiness.add(monke.inspectCount);
+        // }
 
-        Collections.sort(monkeBusiness, Collections.reverseOrder()); //sort list
+        // Collections.sort(monkeBusiness, Collections.reverseOrder()); //sort list
 
-        System.out.println(monkeBusiness.get(0) * monkeBusiness.get(1));
+        // System.out.println(monkeBusiness.get(0) * monkeBusiness.get(1));
 
     }
 
@@ -174,7 +171,7 @@ public class Day11Challenge extends Challenge {
             //get monke info
             String[] opParts = input.get(i+2).strip().split(" ");
             String opType = opParts[5].equals("old") ? "square" : opParts[4];
-            BigInteger opValue = opParts[5].equals("old") ? new BigInteger("-1") : new BigInteger(opParts[5]);
+            int opValue = opParts[5].equals("old") ? -1 : Integer.parseInt(opParts[5]);
             int testValue = Integer.parseInt(input.get(i+3).strip().split(" ")[3]);
             int trueMonke = Integer.parseInt(input.get(i+4).strip().split(" ")[5]);
             int falseMonke = Integer.parseInt(input.get(i+5).strip().split(" ")[5]);
@@ -183,7 +180,7 @@ public class Day11Challenge extends Challenge {
 
             //fill monke with items
             for(String item : input.get(i+1).split(": ")[1].split(", ")) {
-                monke.addItem(new BigInteger(item));
+                monke.addItem(Integer.parseInt(item));
             }
 
             monkes.add(monke);
