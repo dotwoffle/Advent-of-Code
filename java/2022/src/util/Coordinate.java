@@ -38,6 +38,32 @@ public class Coordinate {
 
     }
 
+    /**Creates a copy of the given coordinate object.
+     * @param c The coordinate to copy.
+    */
+    public Coordinate(Coordinate c) {
+
+        //init
+
+        this.x = c.x;
+        this.y = c.y;
+
+    }
+
+    /**Creates a new coordinate at the location specified by a string.
+     * @param coordString A string in the form "x,y".
+    */
+    public Coordinate(String coordString) {
+
+        //init
+
+        String[] coordParts = coordString.split(",");
+
+        this.x = Integer.parseInt(coordParts[0]);
+        this.y = Integer.parseInt(coordParts[1]);
+
+    }
+
 
     /*Methods*/
 
